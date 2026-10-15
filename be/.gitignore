@@ -1,0 +1,8 @@
+target/
+build/
+.gradle/
+logs/
+*.log
+.env
+.idea/dataSources/
+.idea/dataSources.local.xml

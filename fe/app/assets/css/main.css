@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-canvas text-slate-800 font-sans antialiased;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-card bg-white shadow-card;
+  }
+
+  .card-interactive {
+    @apply card transition-colors hover:border-primary-300 hover:shadow-soft;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-card bg-white;
+  }
+
+  .shell-divider-y {
+    @apply border-b border-shell;
+  }
+
+  .shell-divider-x {
+    @apply border-r border-shell;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-transparent px-4 py-2.5 text-sm font-semibold transition
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+      disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn border-primary-600 bg-accent text-white hover:bg-primary-600 shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply btn border-field bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50;
+  }
+
+  .btn-on-dark {
+    @apply btn border-white/30 bg-white/10 text-white hover:border-white/40 hover:bg-white/20;
+  }
+
+  .btn-mint {
+    @apply btn border-primary-600 bg-accent text-white hover:bg-primary-600;
+  }
+
+  .btn-sun {
+    @apply btn border-amber-300 bg-sun-400 text-slate-900 hover:bg-sun-500;
+  }
+
+  .btn-danger {
+    @apply btn border-rose-600 bg-rose-500 text-white hover:bg-rose-600;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-field bg-white px-3.5 py-2.5 text-sm
+      placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-primary-100;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+
+  .page-title {
+    @apply font-display text-2xl font-bold text-slate-800 tracking-tight;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-lg border border-transparent px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  .list-row {
+    @apply rounded-xl border border-emerald-100 bg-white px-3 py-2;
+  }
+
+  .data-table {
+    @apply w-full border-separate border-spacing-0 text-sm;
+  }
+
+  .data-table th,
+  .data-table td {
+    border-right: 2px solid #059669;
+    border-bottom: 2px solid #059669;
+  }
+
+  .data-table tr > :last-child {
+    border-right: 0;
+  }
+
+  .card > .data-table:last-child tbody tr:last-child > *,
+  .card > .overflow-x-auto:last-child > .data-table:last-child tbody tr:last-child > *,
+  .data-table:not(:has(tbody tr)) thead tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  .data-table thead th {
+    @apply bg-slate-100 font-semibold text-slate-700;
+  }
+
+  .card:has(.data-table) {
+    overflow: hidden;
+    border: 2px solid #059669;
+  }
+}

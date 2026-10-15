@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: qlhs-api
+    runtime: docker
+    region: singapore
+    plan: free
+    rootDir: be
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: APP_MAIL_ENABLED
+        value: "false"
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: JWT_SIGNER_KEY
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CORS_ALLOWED_ORIGIN_PATTERNS
+        sync: false
+      - key: APP_FRONTEND_URL
+        sync: false
+      - key: FRONTEND_RESET_PASSWORD_URL
+        sync: false
+      - key: APP_ADMIN_USERNAME
+        sync: false
+      - key: APP_ADMIN_PASSWORD
+        sync: false
+      - key: APP_ADMIN_EMAIL
+        sync: false
+      - key: APP_ADMIN_FULL_NAME
+        sync: false
