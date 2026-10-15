@@ -47,7 +47,7 @@
 import type { Student } from '~/types/api'
 import { useStudentApi } from '~/services/api'
 import { extractErrorMessage } from '~/utils/apiError'
-import { formatDateVN } from '~/utils/date'
+import { formatBirth } from '~/utils/date'
 
 definePageMeta({ middleware: 'auth' })
 
@@ -71,7 +71,7 @@ const rows = computed(() => {
   const current = student.value
   if (!current) return []
   return [
-    { label: 'Ngày sinh', value: formatDateVN(current.dateOfBirth) },
+    { label: 'Ngày sinh', value: formatBirth(current.dateOfBirth) },
     { label: 'Giới tính', value: genderMap[current.gender || ''] || '—' },
     { label: 'Địa chỉ', value: current.address || '—' },
   ]

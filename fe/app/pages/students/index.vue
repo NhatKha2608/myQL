@@ -25,6 +25,7 @@
           <tr>
             <th class="w-16 px-4 py-3">STT</th>
             <th class="px-4 py-3">Họ tên</th>
+            <th class="px-4 py-3">Năm sinh</th>
             <th class="px-4 py-3">Lớp</th>
             <th class="px-4 py-3">Trạng thái</th>
             <th class="px-4 py-3"></th>
@@ -34,6 +35,7 @@
           <tr v-for="(s, index) in students" :key="s.id">
             <td class="px-4 py-3 tabular-nums text-slate-500">{{ page.page * 20 + index + 1 }}</td>
             <td class="px-4 py-3">{{ s.fullName }}</td>
+            <td class="px-4 py-3 tabular-nums">{{ formatBirth(s.dateOfBirth) }}</td>
             <td class="px-4 py-3">{{ s.classroomName || '—' }}</td>
             <td class="px-4 py-3"><CommonStatusBadge :status="s.status" /></td>
             <td class="px-4 py-3 text-right">
@@ -66,6 +68,7 @@
 import type { Student } from '~/types/api'
 import { useStudentApi } from '~/services/api'
 import { extractErrorMessage } from '~/utils/apiError'
+import { formatBirth } from '~/utils/date'
 
 definePageMeta({ middleware: 'auth' })
 

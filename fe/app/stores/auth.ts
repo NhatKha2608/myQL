@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { AuthResponse, ChangePasswordRequest, LoginRequest, UserProfile } from '~/types/api'
 import { extractErrorMessage } from '~/utils/apiError'
+import { SESSION_MAX_AGE_SECONDS } from '~/utils/session'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<UserProfile | null>(null)
@@ -11,12 +12,12 @@ export const useAuthStore = defineStore('auth', () => {
   const accessToken = useCookie<string | null>('qlhs_access_token', {
     sameSite: 'lax',
     secure: import.meta.env.PROD,
-    maxAge: 60 * 60 * 8,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   })
   const refreshToken = useCookie<string | null>('qlhs_refresh_token', {
     sameSite: 'lax',
     secure: import.meta.env.PROD,
-    maxAge: 60 * 60 * 24 * 14,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   })
   const selectedClassroom = useCookie<number | null>('qlhs_selected_classroom', {
     sameSite: 'lax',

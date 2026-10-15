@@ -16,6 +16,15 @@ export function daysFromTodayISO(days: number): string {
   return `${y}-${m}-${day}`
 }
 
+/** Ngày sinh đủ ngày, hoặc chỉ năm nếu file Excel chỉ có năm sinh. */
+export function formatBirth(iso?: string | null): string {
+  if (!iso) return '—'
+  const [y, m, d] = iso.slice(0, 10).split('-')
+  if (!y || !m || !d) return '—'
+  if (m === '01' && d === '01') return y
+  return `${d}/${m}/${y}`
+}
+
 export function formatDateVN(iso?: string | null): string {
   if (!iso) return '—'
   try {

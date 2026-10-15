@@ -28,7 +28,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -137,7 +141,10 @@ public class StudentService {
         int sortOrder = nextSortOrder(classroomId) - 1;
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
-            int nameColumn = resolveNameColumn(sheet.getRow(0));
+            Row header = sheet.getRow(0);
+            int nameColumn = resolveNameColumn(header);
+            Integer birthDateColumn = findColumn(header, "ngaysinh", "ngaythangnamsinh", "dateofbirth", "dob");
+            Integer birthYearColumn = findColumn(header, "namsinh");
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
@@ -147,8 +154,13 @@ public class StudentService {
                 if (name == null) {
                     continue;
                 }
+                LocalDate birthDate = birthDateColumn == null ? null : readBirthDate(row.getCell(birthDateColumn));
+                if (birthDate == null && birthYearColumn != null) {
+                    birthDate = readBirthDate(row.getCell(birthYearColumn));
+                }
                 StudentEntity entity = saveWithAutoCode(StudentEntity.builder()
                         .fullName(name)
+                        .dateOfBirth(birthDate)
                         .status("ACTIVE")
                         .build());
                 sortOrder++;
@@ -166,8 +178,10 @@ public class StudentService {
             Sheet sheet = workbook.createSheet("HocSinh");
             Row header = sheet.createRow(0);
             header.createCell(0).setCellValue("HoTen");
+            header.createCell(1).setCellValue("NamSinh");
             Row sample = sheet.createRow(1);
             sample.createCell(0).setCellValue("Nguyễn Văn A");
+            sample.createCell(1).setCellValue(2018);
             workbook.write(out);
             return out.toByteArray();
         }
@@ -276,21 +290,76 @@ public class StudentService {
     }
 
     private int resolveNameColumn(Row header) {
-        if (header == null) {
-            return 0;
+        Integer column = findColumn(header, "hoten", "hovaten", "ten");
+        if (column != null) {
+            return column;
         }
-        short last = header.getLastCellNum();
-        for (int c = 0; c < last; c++) {
-            String key = normalizeHeader(cellString(header.getCell(c)));
-            if (key.equals("hoten") || key.equals("hovaten") || key.equals("ten")) {
-                return c;
-            }
-        }
-        String first = normalizeHeader(cellString(header.getCell(0)));
+        String first = normalizeHeader(header == null ? null : cellString(header.getCell(0)));
         if (first.equals("mahs") || first.equals("mahocsinh") || first.equals("stt")) {
             return 1;
         }
         return 0;
+    }
+
+    private Integer findColumn(Row header, String... keys) {
+        if (header == null) {
+            return null;
+        }
+        Set<String> wanted = Set.of(keys);
+        short last = header.getLastCellNum();
+        for (int c = 0; c < last; c++) {
+            if (wanted.contains(normalizeHeader(cellString(header.getCell(c))))) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    static LocalDate readBirthDate(Cell cell) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) {
+            return null;
+        }
+        CellType type = cell.getCellType() == CellType.FORMULA
+                ? cell.getCachedFormulaResultType()
+                : cell.getCellType();
+        if (type == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            return cell.getLocalDateTimeCellValue().toLocalDate();
+        }
+        return parseBirthDate(cellString(cell));
+    }
+
+    static LocalDate parseBirthDate(String text) {
+        if (text == null || text.isBlank()) {
+            return null;
+        }
+        String value = text.trim();
+        if (value.matches("\\d{4}")) {
+            int year = Integer.parseInt(value);
+            int currentYear = LocalDate.now().getYear();
+            if (year >= 1980 && year <= currentYear) {
+                return LocalDate.of(year, 1, 1);
+            }
+            return null;
+        }
+        for (DateTimeFormatter formatter : BIRTH_DATE_FORMATS) {
+            try {
+                return LocalDate.parse(value, formatter);
+            } catch (DateTimeParseException ignored) {
+                // thử định dạng tiếp theo
+            }
+        }
+        return null;
+    }
+
+    private static final DateTimeFormatter[] BIRTH_DATE_FORMATS = new DateTimeFormatter[] {
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            strictDate("d/M/uuuu"),
+            strictDate("d-M-uuuu"),
+            strictDate("d.M.uuuu"),
+    };
+
+    private static DateTimeFormatter strictDate(String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
     }
 
     private String normalizeHeader(String value) {
@@ -318,16 +387,23 @@ public class StudentService {
         return value == null || value.isBlank() ? null : value.trim();
     }
 
-    private String cellString(Cell cell) {
+    private static String cellString(Cell cell) {
         if (cell == null) {
             return null;
         }
-        if (cell.getCellType() == CellType.STRING) {
-            String v = cell.getStringCellValue();
-            return v != null && !v.isBlank() ? v.trim() : null;
+        CellType type = cell.getCellType() == CellType.FORMULA
+                ? cell.getCachedFormulaResultType()
+                : cell.getCellType();
+        if (type == CellType.STRING) {
+            String value = cell.getStringCellValue();
+            return value != null && !value.isBlank() ? value.trim() : null;
         }
-        if (cell.getCellType() == CellType.NUMERIC) {
-            return String.valueOf((long) cell.getNumericCellValue());
+        if (type == CellType.NUMERIC) {
+            double number = cell.getNumericCellValue();
+            if (number == Math.rint(number)) {
+                return String.valueOf((long) number);
+            }
+            return String.valueOf(number);
         }
         return null;
     }

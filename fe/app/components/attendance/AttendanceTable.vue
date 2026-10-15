@@ -153,6 +153,7 @@
 
 <script setup lang="ts">
 import type { AttendanceRecord, AttendanceStatus } from '~/types/api'
+import { formatBirth } from '~/utils/date'
 
 const props = defineProps<{
   rows: AttendanceRecord[]
@@ -241,10 +242,7 @@ function fold(value: string) {
 }
 
 function formatDob(iso?: string) {
-  if (!iso) return '—'
-  const [y, m, d] = iso.slice(0, 10).split('-')
-  if (!y || !m || !d) return '—'
-  return `${d}/${m}/${y}`
+  return formatBirth(iso)
 }
 
 function openMenu(status: AttendanceStatus, event: MouseEvent) {

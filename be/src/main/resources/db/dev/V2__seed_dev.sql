@@ -1,33 +1,40 @@
 -- Dữ liệu demo (chỉ dùng môi trường dev). Mật khẩu đăng nhập: password (BCrypt)
-INSERT INTO academic_years (name, start_date, end_date, status)
-VALUES ('2025-2026', '2025-09-05', '2026-05-31', 'ACTIVE');
-
 INSERT INTO users (full_name, email, username, password_hash, role, status, is_deleted)
 VALUES
 ('Quản trị hệ thống', 'admin@qlhs.local', 'admin',
- '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMIN', 'ACTIVE', 0),
-('Nguyễn Thị Lan', 'lan.nguyen@qlhs.local', 'gvl01',
- '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'TEACHER', 'ACTIVE', 0);
+ '$2a$12$tz84dLEMjuA5Uy3NXAafkuPmQLXYDh9WlC3R/ukV8EYl0XcbKBfq2', 'ADMIN', 'ACTIVE', 0),
+('Ngô Bảo Trân', 'lan.nguyen@qlhs.local', 'nbt12345',
+ '$2a$12$tz84dLEMjuA5Uy3NXAafkuPmQLXYDh9WlC3R/ukV8EYl0XcbKBfq2', 'TEACHER', 'ACTIVE', 0);
 
-INSERT INTO classrooms (name, grade_level, academic_year_id, homeroom_teacher_id, description, status, is_deleted)
-VALUES ('3A1', 3, 1, 2, 'Lớp 3A1', 'ACTIVE', 0);
-
-INSERT INTO students (student_code, full_name, date_of_birth, gender, status, is_deleted)
+INSERT INTO academic_years (name, start_date, end_date, status)
 VALUES
-('HS2025001', 'Trần Minh An', '2017-03-12', 'MALE', 'ACTIVE', 0),
-('HS2025002', 'Lê Bảo Ngọc', '2017-07-22', 'FEMALE', 'ACTIVE', 0),
-('HS2025003', 'Phạm Đức Huy', '2017-01-05', 'MALE', 'ACTIVE', 0);
-
-INSERT INTO classroom_students (classroom_id, student_id, enrolled_at, status)
-VALUES (1, 1, '2025-09-05', 'ACTIVE'), (1, 2, '2025-09-05', 'ACTIVE'), (1, 3, '2025-09-05', 'ACTIVE');
-
-INSERT INTO subjects (code, name, description, is_active)
-VALUES
-('TOAN', 'Toán', 'Môn Toán', 1),
-('TIENGVIET', 'Tiếng Việt', 'Môn Tiếng Việt', 1),
-('KHOAHOC', 'Khoa học', 'Môn Khoa học', 1);
-
-INSERT INTO score_rules (classroom_id, name, description, point_value, category, is_active, created_by)
-VALUES
-(1, 'Giúp bạn học tập', 'Chủ động giúp bạn trong giờ học', 2, 'POSITIVE', 1, 2),
-(1, 'Vi phạm nội quy', 'Không tuân thủ nội quy lớp', -2, 'NEGATIVE', 1, 2);
+('2026-2027', '2026-09-05', '2027-05-31', 'ACTIVE'),
+('2027-2028', '2027-09-05', '2028-05-31', 'UPCOMING'),
+('2028-2029', '2028-09-05', '2029-05-31', 'UPCOMING'),
+('2029-2030', '2029-09-05', '2030-05-31', 'UPCOMING'),
+('2030-2031', '2030-09-05', '2031-05-31', 'UPCOMING'),
+('2031-2032', '2031-09-05', '2032-05-31', 'UPCOMING'),
+('2032-2033', '2032-09-05', '2033-05-31', 'UPCOMING'),
+('2033-2034', '2033-09-05', '2034-05-31', 'UPCOMING'),
+('2034-2035', '2034-09-05', '2035-05-31', 'UPCOMING'),
+('2035-2036', '2035-09-05', '2036-05-31', 'UPCOMING'),
+('2036-2037', '2036-09-05', '2037-05-31', 'UPCOMING'),
+('2037-2038', '2037-09-05', '2038-05-31', 'UPCOMING'),
+('2038-2039', '2038-09-05', '2039-05-31', 'UPCOMING'),
+('2039-2040', '2039-09-05', '2040-05-31', 'UPCOMING'),
+('2040-2041', '2040-09-05', '2041-05-31', 'UPCOMING'),
+('2041-2042', '2041-09-05', '2042-05-31', 'UPCOMING'),
+('2042-2043', '2042-09-05', '2043-05-31', 'UPCOMING'),
+('2043-2044', '2043-09-05', '2044-05-31', 'UPCOMING'),
+('2044-2045', '2044-09-05', '2045-05-31', 'UPCOMING'),
+('2045-2046', '2045-09-05', '2046-05-31', 'UPCOMING'),
+('2046-2047', '2046-09-05', '2047-05-31', 'UPCOMING'),
+('2047-2048', '2047-09-05', '2048-05-31', 'UPCOMING'),
+('2048-2049', '2048-09-05', '2049-05-31', 'UPCOMING'),
+('2049-2050', '2049-09-05', '2050-05-31', 'UPCOMING'),
+('2050-2051', '2050-09-05', '2051-05-31', 'UPCOMING'),
+('2051-2052', '2051-09-05', '2052-05-31', 'UPCOMING'),
+('2052-2053', '2052-09-05', '2053-05-31', 'UPCOMING'),
+('2053-2054', '2053-09-05', '2054-05-31', 'UPCOMING'),
+('2054-2055', '2054-09-05', '2055-05-31', 'UPCOMING'),
+('2055-2056', '2055-09-05', '2056-05-31', 'UPCOMING');

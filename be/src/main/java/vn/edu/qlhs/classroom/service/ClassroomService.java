@@ -97,6 +97,8 @@ public class ClassroomService {
     public void delete(Long id) {
         UserPrincipal principal = SecurityUtils.currentUser();
         ClassroomEntity classroom = classroomAccessService.requireAccessibleClassroom(id, principal);
+        classroomStudentRepository.findByClassroomIdAndDeletedFalse(id)
+                .forEach(enrollment -> enrollment.setDeleted(true));
         classroom.setDeleted(true);
         classroomRepository.save(classroom);
         auditLogService.log(principal.getId(), "DELETE", "CLASSROOM", classroom.getId(), classroom.getName(), true);

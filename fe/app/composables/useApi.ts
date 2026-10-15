@@ -1,5 +1,6 @@
 import type { ApiResponse } from '~/types/api'
 import { ApiError } from '~/utils/apiError'
+import { SESSION_MAX_AGE_SECONDS } from '~/utils/session'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
@@ -29,7 +30,7 @@ export function useApi() {
   const accessToken = useCookie<string | null>('qlhs_access_token', {
     sameSite: 'lax',
     secure: import.meta.env.PROD,
-    maxAge: 60 * 60 * 8,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   })
 
   async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {

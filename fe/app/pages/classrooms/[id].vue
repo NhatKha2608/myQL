@@ -3,6 +3,11 @@
     <CommonLoadingState v-if="loading" />
     <CommonErrorState v-else-if="error" :message="error" @retry="load" />
     <template v-else-if="classroom">
+      <div class="flex justify-end">
+        <button type="button" class="btn-danger" :disabled="deleting" @click="remove">
+          {{ deleting ? 'Đang xóa…' : 'Xóa lớp' }}
+        </button>
+      </div>
       <div class="card p-6">
         <h2 class="page-title">{{ classroom.name }}</h2>
         <p class="text-slate-600">Khối {{ classroom.gradeLevel }} · GVCN: {{ classroom.homeroomTeacherName }}</p>
@@ -25,14 +30,17 @@
 import type { Classroom, Student } from '~/types/api'
 import { useClassroomApi } from '~/services/api'
 import { extractErrorMessage } from '~/utils/apiError'
+import { classroomTitle } from '~/utils/classroomLabel'
 
 definePageMeta({ middleware: 'auth' })
 
 const route = useRoute()
 const id = computed(() => Number(route.params.id))
-const { selectClassroom } = useClassroomContext()
+const { selectClassroom, loadClassrooms } = useClassroomContext()
+const { confirm, alert } = useAppDialog()
 const loading = ref(true)
 const error = ref<string | null>(null)
+const deleting = ref(false)
 const classroom = ref<Classroom | null>(null)
 const students = ref<Student[]>([])
 
@@ -47,6 +55,26 @@ async function load() {
     error.value = extractErrorMessage(e, 'Không tải được lớp học')
   } finally {
     loading.value = false
+  }
+}
+
+async function remove() {
+  const current = classroom.value
+  if (!current || deleting.value) return
+  const ok = await confirm(
+    `Xóa ${classroomTitle(current.name)}? Lớp và danh sách học sinh của lớp sẽ không còn hiện trong hệ thống.`,
+    { title: 'Xóa lớp', confirmLabel: 'Xóa', danger: true },
+  )
+  if (!ok) return
+  deleting.value = true
+  try {
+    await useClassroomApi().remove(current.id)
+    await loadClassrooms()
+    await navigateTo('/classrooms')
+  } catch (e) {
+    await alert(extractErrorMessage(e, 'Không xóa được lớp'), { title: 'Không xóa được' })
+  } finally {
+    deleting.value = false
   }
 }
 

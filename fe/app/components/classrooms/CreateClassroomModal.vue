@@ -41,6 +41,7 @@
 import type { AcademicYear, Classroom, ClassroomRequest } from '~/types/api'
 import { useAcademicApi, useClassroomApi } from '~/services/api'
 import { extractErrorMessage } from '~/utils/apiError'
+import { currentAcademicYear } from '~/utils/academicYear'
 
 const open = defineModel<boolean>('open', { required: true })
 const emit = defineEmits<{ created: [Classroom] }>()
@@ -57,7 +58,7 @@ watch(open, async (isOpen) => {
   form.gradeLevel = 3
   try {
     if (!years.value.length) years.value = await useAcademicApi().years()
-    if (years.value[0] && !form.academicYearId) form.academicYearId = years.value[0].id
+    form.academicYearId = currentAcademicYear(years.value)?.id ?? 0
     if (!years.value.length) createError.value = 'Chưa có năm học để tạo lớp'
   } catch (e) {
     createError.value = extractErrorMessage(e, 'Không tải được năm học')

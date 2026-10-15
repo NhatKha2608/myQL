@@ -3,8 +3,8 @@
     <form class="space-y-4" @submit.prevent="submit">
       <h3 class="font-display text-lg font-bold text-slate-800">Nhập học sinh từ Excel</h3>
       <p class="text-sm text-slate-600">
-        File <strong>.xlsx</strong>, tối đa 5MB. Dòng đầu là tiêu đề; từ dòng 2 chỉ cần cột
-        <strong>HoTen</strong>. Mã học sinh được tạo tự động.
+        File <strong>.xlsx</strong>, tối đa 5MB. Dòng đầu là tiêu đề. Cột <strong>HoTen</strong> là bắt buộc.
+        Cột <strong>NamSinh</strong> hoặc <strong>NgaySinh</strong> (năm, hoặc ngày dạng dd/MM/yyyy) sẽ được lưu cùng học sinh.
       </p>
       <div v-if="classrooms.length === 1" class="rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-700">
         Học sinh sẽ được thêm vào <strong>{{ classrooms[0].name }}</strong>

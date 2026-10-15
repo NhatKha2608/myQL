@@ -13,6 +13,8 @@ public interface ClassroomStudentRepository extends JpaRepository<ClassroomStude
 
     List<ClassroomStudentEntity> findByClassroomIdAndStatusAndDeletedFalse(Long classroomId, String status);
 
+    List<ClassroomStudentEntity> findByClassroomIdAndDeletedFalse(Long classroomId);
+
     List<ClassroomStudentEntity> findByStudentIdAndDeletedFalse(Long studentId);
 
     Optional<ClassroomStudentEntity> findByClassroomIdAndStudentIdAndStatusAndDeletedFalse(
