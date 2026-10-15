@@ -60,12 +60,6 @@
         <button type="submit" class="btn-primary w-full" :disabled="auth.loading">
           {{ auth.loading ? 'Đang đăng nhập…' : 'Đăng nhập' }}
         </button>
-
-        <p class="text-center text-xs text-slate-400">
-          Demo: <span class="font-medium text-slate-600">admin</span> hoặc
-          <span class="font-medium text-slate-600">gvl01</span> · mật khẩu
-          <span class="font-medium text-slate-600">password</span>
-        </p>
       </form>
     </div>
   </div>
