@@ -1,7 +1,7 @@
 -- Dữ liệu demo (chỉ dùng môi trường dev). Mật khẩu đăng nhập: password (BCrypt)
 INSERT INTO users (full_name, email, username, password_hash, role, status, is_deleted)
 VALUES
-('Quản trị hệ thống', 'admin@qlhs.local', 'admin',
+('Quản trị hệ thống', 'admin@qlhs.local', 'admin1',
  '$2a$12$tz84dLEMjuA5Uy3NXAafkuPmQLXYDh9WlC3R/ukV8EYl0XcbKBfq2', 'ADMIN', 'ACTIVE', 0),
 ('Ngô Bảo Trân', 'lan.nguyen@qlhs.local', 'nbt12345',
  '$2a$12$tz84dLEMjuA5Uy3NXAafkuPmQLXYDh9WlC3R/ukV8EYl0XcbKBfq2', 'TEACHER', 'ACTIVE', 0);
